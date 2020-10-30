@@ -107,10 +107,6 @@ class skmembers_options_t {
         $this->options = get_option( 'skmembers_options', $this->default_options() );
     }
     
-	function get_html ( $str ) {
-	    return stripslashes(htmlspecialchars($str, ENT_QUOTES, 'UTF-8'));
-	}
-	
     function get_options() {
         return $this->options;
     }
@@ -254,7 +250,7 @@ class skmembers_t {
 	//期限切れなら true
 	function is_limit($limit_date){
 		if (!empty($limit_date)){
-			$now = strtotime(date('Y/m/d'));
+			$now = strtotime(date_i18n('Y/m/d'));
 			$last = strtotime($limit_date);
 			if ($now > $last) {
 				return true;
@@ -600,7 +596,7 @@ class skmembers_t {
 		$limit_date = get_user_meta($userID, 'skmembers_limit_date', true);
 		
 		if (!empty($limit_date)){
-			$now = strtotime(date('Y/m/d'));
+			$now = strtotime(date_i18n('Y/m/d'));
 			$last = strtotime($limit_date);
 			
 			if ($now > $last) {
@@ -674,6 +670,10 @@ class skmembers_admin_menu_t {
     }
     
 
+	function get_html ( $str ) {
+	    return stripslashes(htmlspecialchars($str, ENT_QUOTES, 'UTF-8'));
+	}
+	
     function exec() {
         if ( isset( $_POST['save'] ) ) {
             $options = $this->options->update( $_POST );
@@ -684,8 +684,8 @@ class skmembers_admin_menu_t {
         // 設定変更画面を表示する
         ?>
         <div class="wrap">
-            <h2>sktextadd</h2>
-            <form method="post" action="<?php echo get_html( $_SERVER['REQUEST_URI'] ); ?>">
+            <h2>skmembers</h2>
+            <form method="post" action="<?php echo self::get_html( $_SERVER['REQUEST_URI'] ); ?>">
                 <table class="form-table">
                     <tr valign="top">
                         <th scope="row">ログイン必須:</th>
@@ -713,7 +713,7 @@ class skmembers_admin_menu_t {
                     </tr>
                     <tr valign="top">
                         <th scope="row">ログイン画面のイメージURL:</th>
-                        <td><input type=text name="image_url" size=100 value="<?php echo get_html( $options['image_url'] ); ?>" /></td>
+                        <td><input type=text name="image_url" size=100 value="<?php echo self::get_html( $options['image_url'] ); ?>" /></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">アクセス制限するページのスラッグ:</th>
@@ -721,19 +721,19 @@ class skmembers_admin_menu_t {
                     </tr>
                     <tr valign="top">
                         <th scope="row">差出人名:</th>
-                        <td><input type=text name="from_name" size=100 value="<?php echo get_html( isset($options['from_name']) ? $options['from_name'] : '' ); ?>" /></td>
+                        <td><input type=text name="from_name" size=100 value="<?php echo self::get_html( isset($options['from_name']) ? $options['from_name'] : '' ); ?>" /></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">差出人メールアドレス:</th>
-                        <td><input type=text name="from_address" size=100 value="<?php echo get_html( isset($options['from_address']) ? $options['from_address'] : '' ); ?>" /></td>
+                        <td><input type=text name="from_address" size=100 value="<?php echo self::get_html( isset($options['from_address']) ? $options['from_address'] : '' ); ?>" /></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">返信用メールアドレス:</th>
-                        <td><input type=text name="reply_address" size=100 value="<?php echo get_html( isset($options['reply_address']) ? $options['reply_address'] : '' ); ?>" /></td>
+                        <td><input type=text name="reply_address" size=100 value="<?php echo self::get_html( isset($options['reply_address']) ? $options['reply_address'] : '' ); ?>" /></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">登録時件名:</th>
-                        <td><input type=text name="subject" size=100 value="<?php echo get_html( isset($options['subject']) ? $options['subject'] : '' ); ?>" /></td>
+                        <td><input type=text name="subject" size=100 value="<?php echo self::get_html( isset($options['subject']) ? $options['subject'] : '' ); ?>" /></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">登録時メール本文:</th>
